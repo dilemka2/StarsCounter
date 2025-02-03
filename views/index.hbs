@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- link to fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- link to icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="Logo">Bright<span>Star</span></h1>
+
+            <div class="buttons-list">
+                <a href="/login" class="btn">Login</a>
+                <a href="/register" class="btn">Register</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="welcome-section">
+            <div class="container">
+                <h1>Привіт! Хочеш порахувати зірки?</h1>
+                <p>Рахуй</p>
+                <a href="#form" class="downButton"><i class='bx bx-down-arrow'></i></a>
+            </div>
+        </section>
+
+        <section class="main-section">
+            <div class="container">
+                <form action="/send-photo" method="post" id="form">
+                    <h1>Спочатку загрузіть зіркове небо!</h1>
+                    <p>Гарне воно, чи не так?</p>
+                    <input type="file" name="input" id="input">
+                    <label for="input" class="btn">Загрузіть фотографію</label>
+                    <button class="btn">Порахувати</button>
+                </form>
+            </div>
+        </section>
+
+        <div class="warningBlock-wrapper">
+            <div class="warningBlock">
+                <h2 class="WarningH2">Спочатку Виберіть файл!</h2>
+                <div class="progress-line">
+                    <div class="progress"></div>
+                    <button class="btn" id="close"><i class='bx bx-x' style='color:#ffffff' ></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="js/srcipt.js"></script>
+</body>
+</html>
