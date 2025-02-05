@@ -15,7 +15,7 @@
 <body>
     <header>
         <div class="container">
-            <h1 class="Logo">Bright<span>Star</span></h1>
+            <a href="/" class="Logo">Bright<span>Star</span></a>
 
             <div class="buttons-list">
                 <a href="/login" class="btn">Login</a>
@@ -26,16 +26,20 @@
 
     <main>
         <section class="welcome-section">
+            <div class="transition"></div>
             <div class="container">
-                <h1>Привіт! Хочеш порахувати зірки?</h1>
-                <p>Рахуй</p>
-                <a href="#form" class="downButton"><i class='bx bx-down-arrow'></i></a>
+                <div class="info-wrapper">
+                    <h1>Привіт! Хочеш порахувати зірки?</h1>
+                    <p>Рахуй</p>
+                    <a href="#form" class="downButton"><i class='bx bx-down-arrow'></i></a>
+                </div>
             </div>
         </section>
 
         <section class="main-section">
+            <div class="transition"></div>
             <div class="container">
-                <form action="/send-photo" method="post" id="form">
+                <form action="/send-photo" method="post" id="form" class="info-wrapper">
                     <h1>Спочатку загрузіть зіркове небо!</h1>
                     <p>Гарне воно, чи не так?</p>
                     <input type="file" name="input" id="input">

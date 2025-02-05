@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- link to fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- link to icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="Logo">Bright<span>Star</span></a>
+
+            <div class="buttons-list">
+                <a href="/login" class="btn">Login</a>
+                <a href="/register" class="btn">Register</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="login-register__block">
+            <form action="/login" method="post">
+                <h1>Авторизація</h1>
+                <input type="text" name="login" id="login" placeholder="Введіть логін...">
+                <input type="text" name="password" id="password" placeholder="Введіть пароль...">
+                <p>{{message}}</p>
+                <p>Ще не маєете акаунта? <a href="/register">Зарегеструватись</a></p>
+                <button type="submit">Увійти</button>
+            </form>
+        </div>
+    </main>
+    <script src="js/srcipt.js"></script>
+</body>
+</html>
