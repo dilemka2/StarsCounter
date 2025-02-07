@@ -1,13 +1,20 @@
-// making warning
+// making warning/result
 let progressLine = document.querySelector('.progress-line');
 let progress = document.querySelector('.progress');
-let warningBlock = document.querySelector('.warningBlock-wrapper')
-let closeWarnB = document.querySelector('#close').addEventListener('click', () =>{
+let warningBlock = document.querySelector('#warningBlock-wrapper')
+
+let resultBlock = document.querySelector('#resultBlock-wrapper');
+let resultBlockIn = document.querySelector('.resultBlock')
+let resultImg = document.querySelector('.result-img');
+let resultH2 = document.querySelector('.ResultH2');
+document.querySelector('#close').addEventListener('click', () =>{
     warningBlock.style.display = 'none';
+    progress.style.width = '100%';
 }) ;
 
 function progressUpdating() {
     let amount = 100;
+    progress.style.display = 'block';
     progress.style.width = amount + '%';
     let interval = setInterval(() => {
         if (amount == 0) {
@@ -42,6 +49,19 @@ document.getElementById('form').addEventListener('submit', async(e) => {
             throw new Error(`Server error: ${response.statusText}`)
         }
         const result = await response.json();
+
+        if (result) {
+            resultBlock.style.display = 'flex';
+            progress.style.display = 'none';
+            resultImg.src = `/uploads/${result.greyImagePath}`;
+
+            resultH2.innerText = `Успішно було знайдено ${result.whiteObjectsCount} зірки!`;
+            let closeBTN = document.createElement('button');
+            resultBlockIn.appendChild(closeBTN);
+            closeBTN.innerHTML = `<i class='bx bx-x' style='color:#ffffff' ></i>`
+            closeBTN.classList.add('btn');
+            closeBTN.onclick = () => {resultBlock.style.display='none';closeBTN.remove()};
+        }
     }
 
     catch(e) {

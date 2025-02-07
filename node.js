@@ -32,7 +32,7 @@ const db = mysql.createConnection({
 
 
 db.connect((e) => {
-    if (error) {
+    if (e) {
         console.log(error);
     }
     else {
@@ -52,6 +52,14 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true}))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+hbs.registerHelper('ifEquals', function(value, compareValue, options) {
+    if (value === compareValue) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+})
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); 
@@ -65,6 +73,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 app.get('/', (req,res) => {
+    if(req.session.userId) {
+        res.render('index', {account: 'is', login:login});
+    }
     res.render('index');
 })
 
@@ -75,6 +86,15 @@ app.get('/login', (req,res) => {
 
 app.get('/register', (req,res) => {
     res.render('register');
+})
+
+app.get('/logout', async(req,res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send('Не удалось завершить сессию');
+        }
+        res.redirect('/');
+    });
 })
 
 let login;
@@ -145,24 +165,24 @@ app.post('/register', async(req,res) =>{
 
 app.post('/login', async(req,res) => {
     try {
-        let sqlChecker = 'SELECT * FROM space WHERE email = ?';
-        db.query(sqlChecker, login, (err, result) => {
+        let sqlChecker = 'SELECT * FROM space WHERE login = ?';
+        db.query(sqlChecker, req.body.login, (err, result) => {
             if (err) {
-                return res.status(500).send('something went wrong during cheking te email');
+                return res.status(500).send('something went wrong during cheking the email');
             }
             if (result.length === 0) {
-                return res.redirect('/login', {
+                return res.render('login', {
                     message: 'There is no account with that login'
                 })
             }
             let user = result[0];
-            if (password != user.password) {
-                return res.render('/login', {
+            if (req.body.password != user.password) {
+                return res.render('login', {
                     message: 'Wrong password'
                 })
             }
             if (password == user.password) {
-                res.render('index', {account: 'is',})
+                res.render('index', {account: 'is', login:login})
                 req.session.userId = user.id;
                 console.log('works')
             }
@@ -180,28 +200,40 @@ app.post('/send-photo', upload.single('photo') ,async (req,res) => {
     }
     const photo = req.file.filename;
     let filePath = path.join(__dirname, 'uploads', photo);
-    let ImageGrey;
     async function makingGrey(filePath) {
         try {
-            Image = await Image.load(filePath);
-            ImageGrey = Image.grey();
-            await ImageGrey.save(filePath+'-grey.jpg');
-        }
-        catch(e) {
-            console.log(e)
+            let image = await Image.load(filePath);
+            let imageGrey = image.grey();
+            await imageGrey.save(filePath + '-grey.jpg');
+            return imageGrey;
+        } catch (e) {
+            console.log(e);
+            return null;
         }
     }
-    let succesGrayin = await makingGrey(filePath) 
+    async function countWhiteObjects(image) {
+        try {
+            let threshold = image.mask({ threshold: 0.5 });
+            let roiManager = image.getRoiManager(); 
+            roiManager.fromMask(threshold);
+            let rois = roiManager.getRois();
+            console.log(`Знайдено Білих об'єктів: ${rois.length}`);
+            return rois.length;
+        } catch (error) {
+            console.log("помилка при обробці:", error);
+            return 0;
+        }
+    }
 
-    if (succesGrayin) {
-        const whiteObjectsCounter = await countWhiteObjects(ImageGrey);
+    let imageGrey = await makingGrey(filePath);
+    if (imageGrey) {
+        const whiteObjectsCounter = await countWhiteObjects(imageGrey);
         res.json({
-            message: 'File successfully processed',
-            greyImagePath,
-            whiteObjectsCount
+            greyImagePath: photo+'-grey.jpg',
+            whiteObjectsCount: whiteObjectsCounter,
         });
     }else {
-        res.status(500).json({ error: 'Error processing the image.' });  
+        res.status(500).json({ error: 'помилка при обробці' });  
     }
 
 })

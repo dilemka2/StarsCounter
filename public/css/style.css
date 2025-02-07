@@ -26,6 +26,8 @@ section {
     position: relative;
 }
 
+
+
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -65,6 +67,32 @@ header .container {
     color: #FEE3A2;
 }
 
+.header-li {
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 15px 15px 0 0;
+}
+
+.header-li:hover {
+    outline:2px solid #1D1616;
+    background-color: #4d3d3d;
+}
+
+.header-li:hover .header-sub-ul {
+    display: block;
+    position: absolute;
+    padding: 10px;
+    background-color: #4d3d3d;
+    width: 100%;
+    top: 35px;
+    left: 0;
+
+}
+.header-sub-ul {
+    display: none;
+    transition: .5s;
+}
 
 .btn {
     padding: 10px 15px;
@@ -88,22 +116,14 @@ header .container {
 /* welcome section */
 
 .welcome-section {
-    /* background-image: url(/img/first-background.jpg); */
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     text-align: center;
     height: 100vh;
     margin-top: -79px;
     display: flex;
     align-items: center;
     font-size: 30px;
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
-.welcome-section .transition {
-    background: linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(255, 255, 255, 0) 100%);
-}
 
 .downButton {
     margin: 0 auto;
@@ -135,22 +155,14 @@ header .container {
 /* main-section */
 
 .main-section {
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-    /* background-image: url(/img/second-background.jpg); */
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     text-align: center;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
-.main-section .transition {
-    background: linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgba(255, 255, 255, 0) 100%);
-    top: 0;
-}
 .main-section h1 {
     position: relative;
 }
@@ -180,10 +192,15 @@ header .container {
 }
 
 
-/* warningBlock-wrapper */
+/* warningBlock/result-wrapper */
 
-.warningBlock-wrapper {
+#warningBlock-wrapper,
+#resultBlock-wrapper {
     display: none;
+}
+
+
+.info-block-wrapper{
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -196,7 +213,7 @@ header .container {
     
 }
 
-.warningBlock {
+.info-block {
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -205,7 +222,7 @@ header .container {
     position: relative;
     z-index: 2;
     width: 300px;
-    height: 200px;
+    min-height: 200px;
     border-radius: 25px;
     border: 2px solid #BE7B72;
     text-align: center;
@@ -223,7 +240,8 @@ header .container {
     transition: .5s;
 }
 
-#close {
+#close,
+.resultBlock .btn{
     position: absolute;
     top: 10px;
     right: 10px;
@@ -234,6 +252,17 @@ header .container {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.resultH2 {
+    margin-top: 10px;
+}
+
+.result-img {
+    margin-top: 10px;
+    width: 50%;
+    height: auto;
+    margin: 0 auto;
+    background-position: center;
 }
 
 /* login-register block */
@@ -254,4 +283,68 @@ header .container {
     flex-direction: column;
     gap: 20px;
     text-align: center;
+    border: 2px solid #FDAF7B;
+    padding: 20px;
+    border-radius: 25px;
 }
+
+.login-register__block input {
+    padding: 10px;
+    height: 30px;
+    background-color: #4d3d3d;
+    border: none;
+    outline: 2px solid #FDAF7B;
+    font-size: 20px;
+    color: white;
+    transition: .5s;
+}
+
+.login-register__block input:focus {
+    outline: 2px solid #BE7B72;
+    border-radius: 5px;
+}
+
+
+.login-register__block button {
+    height: 30px;
+    background-color: #FDAF7B;
+    color: #fff;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.login-register__block button:hover {
+    transform: translateY(-2px);
+}
+
+/* blocker */
+
+.blocker-wrapper {
+    opacity: 0;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1D1616;
+    border-radius: 25px;
+    transition: .5s;
+}
+
+.blocker-wrapper:hover {
+    opacity: 1;
+}
+
+.blocker {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
