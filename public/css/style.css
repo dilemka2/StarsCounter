@@ -94,6 +94,31 @@ header .container {
     transition: .5s;
 }
 
+.header-sub-li {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: .5s;
+    text-align: center;
+    position: relative;
+}
+
+
+.header-sub-li::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    border-radius: 5px;
+    background-color: #BE7B72;
+    transition: .5s;
+    opacity: 0;
+}
+.header-sub-li:hover::before {
+    opacity: 1;
+}
+
 .btn {
     padding: 10px 15px;
     background-color: #FDAF7B;
@@ -263,6 +288,8 @@ header .container {
     height: auto;
     margin: 0 auto;
     background-position: center;
+    border: 2px solid #FDAF7B;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 /* login-register block */
@@ -348,3 +375,73 @@ header .container {
     gap: 25px;
 }
 
+/* profile */
+
+.profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.profile-card {
+    position: relative;
+    width: 40%;
+    min-height: 400px;
+    background-color: #f5f5f5;
+    border-radius: 35px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+.profile-img {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    transition: .5s;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #FDAF7B;
+}
+
+.profile-img:hover {
+    opacity: .7;
+    transform: scale(1.06);
+}
+
+.profile-h2 {
+    color: #1D1616;
+    position: relative;
+}
+
+.profile-p {
+    color: #FDAF7B;
+}
+
+.profile-description {
+    text-align: center;
+    padding: 20px;
+    width: 80%;
+    margin: 0 auto;
+    color: #1D1616;
+    border-radius: 15px;
+    border: none;
+    height: auto;
+}
+
+.profile-description:focus {
+    outline: none;
+}
+
+.profile .btn {
+    border-radius: 10px;
+    margin-bottom: 0px;
+}
+
+#input-profile {
+    display: none;
+}

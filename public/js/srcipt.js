@@ -28,6 +28,7 @@ function progressUpdating() {
     }, 300)
 }
 
+
 document.getElementById('form').addEventListener('submit', async(e) => {
     e.preventDefault();
     const file = document.getElementById('input').files[0];
@@ -63,6 +64,35 @@ document.getElementById('form').addEventListener('submit', async(e) => {
             closeBTN.onclick = () => {resultBlock.style.display='none';closeBTN.remove()};
         }
     }
+
+    catch(e) {
+        console.log(e);
+    }
+})
+
+document.getElementById('profile-form').addEventListener('submit', async(e) => {
+    e.preventDefault();
+    const profilePic = document.getElementById('input-profile').files[0];
+    const profileDesc = document.getElementById('describsion').value;
+    
+    if(!profilePic) {
+        alert('ви не загрузили файл');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('inputProfile', profilePic);
+    formData.append('describsion', profileDesc);
+    
+    try {
+        const responseP = await fetch('http://localhost:3030/profile-update', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!responseP.ok) {
+            throw new Error(`Server error: ${response.statusText}`)
+        }
+    }   
 
     catch(e) {
         console.log(e);

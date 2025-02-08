@@ -5,6 +5,7 @@ const multer = require('multer');
 const { urlencoded } = require('body-parser');
 const dotenv = require('dotenv');
 const session = require('express-session');
+const fs = require('fs');
 
 // sending email
 const nodemailer = require('nodemailer');
@@ -71,7 +72,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage })
-
+// routing
 app.get('/', (req,res) => {
     if(req.session.userId) {
         res.render('index', {account: 'is', login:login});
@@ -79,7 +80,27 @@ app.get('/', (req,res) => {
     res.render('index');
 })
 
-// routing
+
+app.get('/profile', (req,res) => {
+    if(!req.session.userId) {
+        res.render('index');
+    }
+    fs.readFile(`users_info/${login}.JSON`, 'utf-8', (err,data) => {
+        if (err) {
+         console.error('Ошибка чтения файла:', err);
+        }
+        const profileData = JSON.parse(data);
+        res.render('profile', { 
+            login: login,
+            description: profileData.des,
+            img: profileData.img,
+            des: 'exist',
+            imgE: 'exist',
+            account: 'is',
+        });
+     })
+})
+
 app.get('/login', (req,res) => {
     res.render('login');
 })
@@ -132,6 +153,15 @@ app.post('/register', async(req,res) =>{
                     return res.status(500).send('Something went wrong')
                 }
             })
+            const userInfo = {
+                img:'',
+                des: '',
+            }
+            const userInfoJson = JSON.stringify(userInfo, null, 2);
+            await fs.writeFile(`users_info/${login}.JSON`, userInfoJson, () => {
+                console.log('has just been created');
+            })
+
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -181,6 +211,8 @@ app.post('/login', async(req,res) => {
                     message: 'Wrong password'
                 })
             }
+            // adding info
+            
             if (password == user.password) {
                 res.render('index', {account: 'is', login:login})
                 req.session.userId = user.id;
@@ -194,6 +226,8 @@ app.post('/login', async(req,res) => {
 })
 
 
+let profilePic;
+let profileDesc;
 app.post('/send-photo', upload.single('photo') ,async (req,res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded.' });
@@ -238,6 +272,42 @@ app.post('/send-photo', upload.single('photo') ,async (req,res) => {
 
 })
 
+app.post('/profile-update', upload.single('inputProfile'), async(req,res) => {
+    if (!req.file) {
+        return res.status(400).send('Файл не был загружен.');
+    }
+    profilePic = req.file.filename;
+    profileDesc = req.body.describsion;
+    console.log(profileDesc);
+    let fullPathProfile = path.join(__dirname, 'uploads', profilePic);
+    
+    const userInfo = {
+        img:path.join('uploads', profilePic),
+        des: profileDesc,
+    }
+    const userInfoJson = JSON.stringify(userInfo, null, 2);
+    fs.writeFile(`users_info/${login}.JSON`, userInfoJson, (err) =>{
+        if (err) {
+            console.log(err);
+            return;
+        }
+        fs.readFile(`users_info/${login}.JSON`, 'utf-8', (err,data) => {
+            if (err) {
+             console.error('Ошибка чтения файла:', err);
+            }
+            const profileData = JSON.parse(data);
+            res.render('profile', { 
+                login: login,
+                description: profileData.des,
+                img: profileData.img,
+                des: 'exist',
+                imgE: 'exist',
+                account: 'is',
+            });
+         })
+    })
+   
+})
 
 
 const port = 3030;

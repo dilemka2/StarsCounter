@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- link to fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- link to icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="Logo">Bright<span>Star</span></a>
+            {{#ifEquals account 'is'}}
+                <ul class="header-ul">
+                    <li class="header-li">Привіт {{login}}!
+                        <ul class="header-sub-ul">
+                            <li class="header-sub-li"><a href="/profile">Профіль</a></li>
+                            <li class="header-sub-li"><a href="/logout">Вийти</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            {{else}}
+                <div class="buttons-list">
+                    <a href="/login" class="btn">Login</a>
+                    <a href="/register" class="btn">Register</a>
+                </div>
+            {{/ifEquals}}
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="profile">
+            <form action="/profile-update" method="post" class="profile-card" id="profile-form" enctype="multipart/form-data">
+                <input type="file" name="inputProfile" id="input-profile">
+                <label for="input-profile">
+                    {{#ifEquals imgE 'exist'}}
+                    <img src="{{img}}" class="profile-img"  alt="profile-pic">
+                    {{else}}
+                    <img src="/public/img/profile-img.webp" class="profile-img"  alt="profile-pic">
+                    {{/ifEquals}}
+                </label>
+                <h2 class="profile-h2">{{login}}</h2>
+                {{#ifEquals des 'exist'}}
+                    <input type="text" class="profile-description"  name="describsion" id="describsion" placeholder="{{description}}">
+                {{else}}
+                    <input type="text" class="profile-description"  name="describsion" id="describsion" placeholder="here can be your bio">
+                {{/ifEquals}}
+                <p class="profile-p">{{message}}</p>
+                <button type="submit" class="btn">Зберегти</button>
+            </form>
+        </section>
+        </div>
+    </main>
+    <script src="js/srcipt.js"></script>
+</body>
+</html>
