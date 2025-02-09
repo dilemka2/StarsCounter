@@ -34,18 +34,14 @@ const db = mysql.createConnection({
 
 db.connect((e) => {
     if (e) {
-        console.log(error);
+        console.log(e);
     }
     else {
         console.log('connected')
     }
 })
 // working with photos
-let getColors = require('get-image-colors');
 let { Image } = require('image-js');
-const { error } = require('console');
-const { inflate } = require('zlib');
-
 
 app.set('view engine' , 'hbs');
 app.set('views');
@@ -94,9 +90,8 @@ app.get('/profile', (req,res) => {
             login: login,
             description: profileData.des,
             img: profileData.img,
-            des: 'exist',
-            imgE: 'exist',
             account: 'is',
+            stars: profileData.stars,
         });
      })
 })
@@ -136,7 +131,7 @@ app.post('/register', async(req,res) =>{
             }
             if (result.length>0) {
                 return res.render('register', {
-                    message:'this email is already used'
+                    message:'This email is already used'
                 })
             } 
 
@@ -154,14 +149,13 @@ app.post('/register', async(req,res) =>{
                 }
             })
             const userInfo = {
-                img:'',
-                des: '',
+                img:'uploads\\profile-img.webp',
+                des: 'Add Bio📝',
+                stars: starsArray,
             }
             const userInfoJson = JSON.stringify(userInfo, null, 2);
-            await fs.writeFile(`users_info/${login}.JSON`, userInfoJson, () => {
-                console.log('has just been created');
-            })
-
+            await fs.writeFile(`users_info/${login}.JSON`, userInfoJson, () => {})
+            
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -225,9 +219,7 @@ app.post('/login', async(req,res) => {
     }
 })
 
-
-let profilePic;
-let profileDesc;
+let starsArray = [];
 app.post('/send-photo', upload.single('photo') ,async (req,res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded.' });
@@ -251,7 +243,6 @@ app.post('/send-photo', upload.single('photo') ,async (req,res) => {
             let roiManager = image.getRoiManager(); 
             roiManager.fromMask(threshold);
             let rois = roiManager.getRois();
-            console.log(`Знайдено Білих об'єктів: ${rois.length}`);
             return rois.length;
         } catch (error) {
             console.log("помилка при обробці:", error);
@@ -262,28 +253,44 @@ app.post('/send-photo', upload.single('photo') ,async (req,res) => {
     let imageGrey = await makingGrey(filePath);
     if (imageGrey) {
         const whiteObjectsCounter = await countWhiteObjects(imageGrey);
+        starsArray.push(whiteObjectsCounter);
+        fs.readFile(`users_info/${login}.JSON`, 'utf-8', (err,data) => {
+            if(err) {
+                console.log(err)
+            }
+            const profileData = JSON.parse(data);
+            const userInBack = {
+                img:profileData.img,
+                des:profileData.des,
+                stars:starsArray,
+            }
+            const ReadyuserInBack = JSON.stringify(userInBack,null, 2)
+            fs.writeFileSync(`users_info/${login}.JSON`, ReadyuserInBack, () => {})
+        })
         res.json({
             greyImagePath: photo+'-grey.jpg',
             whiteObjectsCount: whiteObjectsCounter,
         });
     }else {
-        res.status(500).json({ error: 'помилка при обробці' });  
+        return res.status(500).json({ error: 'помилка при обробці' });  
     }
 
 })
 
+
+let profilePic;
+let profileDesc;
 app.post('/profile-update', upload.single('inputProfile'), async(req,res) => {
     if (!req.file) {
         return res.status(400).send('Файл не был загружен.');
     }
     profilePic = req.file.filename;
     profileDesc = req.body.describsion;
-    console.log(profileDesc);
-    let fullPathProfile = path.join(__dirname, 'uploads', profilePic);
     
     const userInfo = {
         img:path.join('uploads', profilePic),
         des: profileDesc,
+        stars: starsArray,
     }
     const userInfoJson = JSON.stringify(userInfo, null, 2);
     fs.writeFile(`users_info/${login}.JSON`, userInfoJson, (err) =>{
@@ -300,9 +307,9 @@ app.post('/profile-update', upload.single('inputProfile'), async(req,res) => {
                 login: login,
                 description: profileData.des,
                 img: profileData.img,
-                des: 'exist',
-                imgE: 'exist',
                 account: 'is',
+                message: 'Дані успішно оновленні',
+                stars: profileData.stars,
             });
          })
     })

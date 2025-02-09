@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>BrightStar/profile</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- link to fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,21 +40,17 @@
             <form action="/profile-update" method="post" class="profile-card" id="profile-form" enctype="multipart/form-data">
                 <input type="file" name="inputProfile" id="input-profile">
                 <label for="input-profile">
-                    {{#ifEquals imgE 'exist'}}
                     <img src="{{img}}" class="profile-img"  alt="profile-pic">
-                    {{else}}
-                    <img src="/public/img/profile-img.webp" class="profile-img"  alt="profile-pic">
-                    {{/ifEquals}}
                 </label>
                 <h2 class="profile-h2">{{login}}</h2>
-                {{#ifEquals des 'exist'}}
-                    <input type="text" class="profile-description"  name="describsion" id="describsion" placeholder="{{description}}">
-                {{else}}
-                    <input type="text" class="profile-description"  name="describsion" id="describsion" placeholder="here can be your bio">
-                {{/ifEquals}}
+                <input type="text" class="profile-description"  name="describsion" id="describsion" placeholder="{{description}}">
                 <p class="profile-p">{{message}}</p>
                 <button type="submit" class="btn">Зберегти</button>
             </form>
+            <div class="profile-starsCounter">
+                <h2 class="profile-starsCounter-h2">Історія Підрахунків:</h2>
+                <p class="profile-starsCounter-p">{{stars}}</p>
+            </div>
         </section>
         </div>
     </main>
