@@ -83,7 +83,7 @@ app.get('/profile', (req,res) => {
     }
     fs.readFile(`users_info/${login}.JSON`, 'utf-8', (err,data) => {
         if (err) {
-         console.error('Ошибка чтения файла:', err);
+         console.error(err);
         }
         const profileData = JSON.parse(data);
         res.render('profile', { 
@@ -107,7 +107,7 @@ app.get('/register', (req,res) => {
 app.get('/logout', async(req,res) => {
     req.session.destroy((err) => {
         if (err) {
-            return res.status(500).send('Не удалось завершить сессию');
+            return res.status(500).send('Something went wrong during lougouting');
         }
         res.redirect('/');
     });
@@ -205,7 +205,6 @@ app.post('/login', async(req,res) => {
                     message: 'Wrong password'
                 })
             }
-            // adding info
             
             if (password == user.password) {
                 res.render('index', {account: 'is', login:login})
@@ -245,7 +244,7 @@ app.post('/send-photo', upload.single('photo') ,async (req,res) => {
             let rois = roiManager.getRois();
             return rois.length;
         } catch (error) {
-            console.log("помилка при обробці:", error);
+            console.log("an error during anilizing", error);
             return 0;
         }
     }
@@ -272,7 +271,7 @@ app.post('/send-photo', upload.single('photo') ,async (req,res) => {
             whiteObjectsCount: whiteObjectsCounter,
         });
     }else {
-        return res.status(500).json({ error: 'помилка при обробці' });  
+        return res.status(500).json({ error: 'an error during anilizing' });  
     }
 
 })
@@ -282,7 +281,7 @@ let profilePic;
 let profileDesc;
 app.post('/profile-update', upload.single('inputProfile'), async(req,res) => {
     if (!req.file) {
-        return res.status(400).send('Файл не был загружен.');
+        return res.status(400).send('The file wasn`t uploaded');
     }
     profilePic = req.file.filename;
     profileDesc = req.body.describsion;
@@ -300,7 +299,7 @@ app.post('/profile-update', upload.single('inputProfile'), async(req,res) => {
         }
         fs.readFile(`users_info/${login}.JSON`, 'utf-8', (err,data) => {
             if (err) {
-             console.error('Ошибка чтения файла:', err);
+             console.error('Something went wrong during reading file', err);
             }
             const profileData = JSON.parse(data);
             res.render('profile', { 
