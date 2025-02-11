@@ -224,6 +224,10 @@ header .container {
     display: none;
 }
 
+.warningBlock {
+    width: 400px !important;
+    min-height: 180px !important;
+}
 
 .info-block-wrapper{
     justify-content: center;
